@@ -2,10 +2,13 @@ import com.google.common.collect.ImmutableList;
 import io.restassured.response.Response;
 import models.Category;
 import models.Pet;
+import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.List;
 
 public class RefacTestsPetStore_6 {
 
@@ -55,7 +58,7 @@ public class RefacTestsPetStore_6 {
 
         Pet cat = new Pet();
         //cat.setName("Murchyk");
-        cat.setName("Murchyk2");
+        cat.setName("Murchyk3");
         cat.setCategory(category);
 //        cat.setPhotoUrls(ImmutableList.of("someUrl"));
         cat.setStatus("available");
@@ -65,22 +68,49 @@ public class RefacTestsPetStore_6 {
                 .then()
                 .statusCode(200);
 
+        System.out.println();
     }
     @Test
     public void verifyPetHasIdAfterCreation() {
-        Pet murcyck2 = Pet.createCatPetAvailable(123124, "Murchyk2");
+        Pet murchyk = Pet.createCatPetAvailable(123124, "Murchyk2");
 
         Response petResponse = new PetStorePetEndPoint()
-                .createPet(murcyck2);
+                .createPet(murchyk);
 
-        Pet petService = petResponse.body().as(Pet.class);
-//        Assert.assertNotNull(petService);
-        Assert.assertNotNull(petService.getId());
+        Pet petFromService = petResponse.body().as(Pet.class);
+//        Assert.assertNotNull(petFromService);
+//        Assert.assertNotNull(petFromService.getId());
+
+        SoftAssertions assertions = new SoftAssertions();
+//        assertions.assertThat(petFromService.getName()).as("Name").isEqualTo(murchyk.getName());
+        assertions.assertThat(petFromService.getName()).as("Name").isEqualTo("murchyck");
+//        assertions.assertThat(petFromService.getStatus()).as("Status").isEqualTo(murchyk.getStatus());
+        assertions.assertThat(petFromService.getStatus()).as("Status").isEqualTo("sold");
+        assertions.assertAll();
 
     }
 
     @BeforeClass
     public static void cleanUp() {
+        List<Pet> petList = new PetStorePetEndPoint()
+                .getPetByStatus("available")
+                .body()
+                .jsonPath().getList("$", Pet.class);
 
+        List<Pet> petList2 = new PetStorePetEndPoint()
+                .getPetByStatus("available")
+                .body()
+                .jsonPath().getList("findAll {item -> item.name == 'Murchyk2' }", Pet.class);
+
+        List<Pet> petList3 = new PetStorePetEndPoint()
+                .getPetByStatus("available")
+                .body()
+                .jsonPath().getList("findAll {item -> item.name == 'Murchyk3' }", Pet.class);
+
+        for(Pet pet : petList2) {
+            new PetStorePetEndPoint().deleteById(pet.getId());
+        }
+
+        System.out.println();
     }
 }

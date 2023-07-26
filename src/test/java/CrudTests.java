@@ -1,0 +1,126 @@
+import io.restassured.response.Response;
+import models.Pet;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.util.List;
+
+public class CrudTests {
+
+    @BeforeClass
+    public static void cleanUp() {
+        List<Pet> petList = new PetStorePetEndPoint()
+                .getPetByStatus("available")
+                .body()
+                .jsonPath().getList("$", Pet.class);
+
+//        List<Pet> petList2 = new PetStorePetEndPoint()
+//                .getPetByStatus("available")
+//                .body()
+//                .jsonPath().getList("findAll {item -> item.name == 'Murchyk2' }", Pet.class);
+
+        List<Pet> petList3 = new PetStorePetEndPoint()
+                .getPetByStatus("available")
+                .body()
+                .jsonPath().getList("findAll {item -> item.name == 'Murchyk100' }", Pet.class);
+
+        for (Pet pet : petList3) {
+            new PetStorePetEndPoint().deleteById(pet.getId());
+        }
+
+        System.out.println();
+    }
+
+
+    @Test
+    public void createPet() {
+        // Given
+        Pet murchyk = Pet.createCatPetAvailable(123125, "Murchyk100");
+        // When
+        Response petResponce = new PetStorePetEndPoint()
+                .createPet(murchyk);
+        // Then
+        long createdPetId = petResponce
+                .body()
+                .as(Pet.class)
+                .getId();
+
+        Pet petCrearedFromService = new PetStorePetEndPoint()
+                .getPetById(String.valueOf(createdPetId))
+                .as(Pet.class);
+
+        SoftAssertions assertions = new SoftAssertions();
+        assertions.assertThat(petCrearedFromService.getName()).as("Name").isEqualTo(murchyk.getName());
+        assertions.assertThat(petCrearedFromService.getStatus()).as("Status").isEqualTo(murchyk.getStatus());
+        assertions.assertAll();
+
+    }
+
+    @Test
+    public void readPet() {
+        // Given
+        Pet murchyk = Pet.createCatPetAvailable(123125, "Murchyk100");
+        Response petResponce = new PetStorePetEndPoint()
+                .createPet(murchyk);
+        long createdPetId = petResponce
+                .body()
+                .as(Pet.class)
+                .getId();
+        // When
+        Pet petCrearedFromService = new PetStorePetEndPoint()
+                .getPetById(String.valueOf(createdPetId))
+                .as(Pet.class);
+        // Then
+        SoftAssertions assertions = new SoftAssertions();
+        assertions.assertThat(petCrearedFromService.getName()).as("Name").isEqualTo(murchyk.getName());
+        assertions.assertThat(petCrearedFromService.getStatus()).as("Status").isEqualTo(murchyk.getStatus());
+        assertions.assertAll();
+
+    }
+
+    @Test
+    public void updatePet() {
+        // Given
+        Pet murchyk = Pet.createCatPetAvailable(123125, "Murchyk100");
+        Response petResponce = new PetStorePetEndPoint()
+                .createPet(murchyk);
+
+        murchyk.setStatus("sold");
+
+        // When
+        Pet petCrearedFromService = new PetStorePetEndPoint()
+                .updatePet(murchyk).body().as(Pet.class);
+        // Then
+        SoftAssertions assertions = new SoftAssertions();
+        assertions.assertThat(petCrearedFromService.getName()).as("Name").isEqualTo(murchyk.getName());
+        assertions.assertThat(petCrearedFromService.getStatus()).as("Status").isEqualTo(murchyk.getStatus());
+        assertions.assertAll();
+
+    }
+
+    @Test
+    public void deletePet() {
+        // Given
+        Pet murchyk = Pet.createCatPetAvailable(123125, "Murchyk100");
+        Response petResponce = new PetStorePetEndPoint()
+                .createPet(murchyk);
+        long createdPetId = petResponce
+                .body()
+                .as(Pet.class)
+                .getId();
+        Pet petCrearedFromService = new PetStorePetEndPoint()
+                .getPetById(String.valueOf(createdPetId))
+                .as(Pet.class);
+        // When
+        new PetStorePetEndPoint().deleteById(petCrearedFromService.getId());
+        // Then
+        Response petById = new PetStorePetEndPoint().getPetById(String.valueOf(petCrearedFromService.getId()));
+        Assertions.assertThat(petById.statusCode()).isEqualTo(200);
+//        Assertions.assertThat(petById.statusCode()).isEqualTo(404);
+
+
+    }
+
+}

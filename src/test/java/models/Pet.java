@@ -67,7 +67,7 @@ public class Pet {
 
         Pet pet = new Pet();
         pet.setName(name);
-        pet.setPhotoUrls(ImmutableList.of("someUrl"));
+        //pet.setPhotoUrls(ImmutableList.of("someUrl"));
         pet.setCategory(category);
         pet.setStatus("available");
         return pet;

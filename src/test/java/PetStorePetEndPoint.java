@@ -37,6 +37,14 @@ public class PetStorePetEndPoint {
                 .then().extract().response();
     }
 
+    public Response updatePet(Pet pet) {
+        return given()
+                .body(pet)
+                .when()
+                .put(Config.CREATE_PET)
+                .then().extract().response();
+    }
+
     private RequestSpecification given() {
         return RestAssured.given()
                 .log().uri()

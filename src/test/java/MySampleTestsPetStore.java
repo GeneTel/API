@@ -1,14 +1,17 @@
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.hamcrest.Matchers;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import static io.restassured.RestAssured.given;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MySampleTestsPetStore {
 
     @Test
-    public void verifyStatusCode() {
+    public void bverifyStatusCode() {
         new PetStorePetEndPoint()
                 .getPetByStatus("available")
                 .then()
@@ -17,7 +20,7 @@ public class MySampleTestsPetStore {
     }
 
     @Test
-    public void verifyBodyUseParam() {
+    public void averifyBodyUseParam() {
         new PetStorePetEndPoint()
                 .getPetByStatus("available")
                 .then()
@@ -27,7 +30,7 @@ public class MySampleTestsPetStore {
     }
 
     @Test
-    public void verifyNotExistingPet() {
+    public void cverifyNotExistingPet() {
         new PetStorePetEndPoint()
                 .getPetById("0")
                 .then()
@@ -36,7 +39,7 @@ public class MySampleTestsPetStore {
     }
 
     @Test
-    public void verifyNotExistingPetReturn404() {
+    public void dverifyNotExistingPetReturn404() {
         new PetStorePetEndPoint()
                 .getPetById("123456789012345")
                 .then()
