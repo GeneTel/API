@@ -16,11 +16,6 @@ public class CrudTests {
                 .body()
                 .jsonPath().getList("$", Pet.class);
 
-//        List<Pet> petList2 = new PetStorePetEndPoint()
-//                .getPetByStatus("available")
-//                .body()
-//                .jsonPath().getList("findAll {item -> item.name == 'Murchyk2' }", Pet.class);
-
         List<Pet> petList3 = new PetStorePetEndPoint()
                 .getPetByStatus("available")
                 .body()
