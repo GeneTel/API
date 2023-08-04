@@ -1,5 +1,3 @@
-package UserCrudTests;
-
 import io.restassured.response.Response;
 import models.User;
 import org.assertj.core.api.SoftAssertions;
@@ -12,6 +10,7 @@ public class UserCrudTests {
     public static void cleanUp() {
 
     }
+
     @Test
     public void createUser() {
         // Given
@@ -22,6 +21,7 @@ public class UserCrudTests {
 
         // Then
         User createdUser = createUserResponse.body().as(User.class);
+
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(createdUser.getUsername()).isEqualTo(newUser.getUsername());
         assertions.assertThat(createdUser.getFirstName()).isEqualTo(newUser.getFirstName());

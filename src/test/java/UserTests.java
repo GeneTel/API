@@ -1,7 +1,6 @@
-package models;
-
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import models.UserSimpleEntity;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

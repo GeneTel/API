@@ -1,10 +1,7 @@
-package UserCrudTests;
-
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import models.Pet;
 import models.User;
 
 import static io.restassured.RestAssured.given;
@@ -18,7 +15,7 @@ public class PetStoreUserEndPoint {
         return given()
                 .body(user)
                 .when()
-                .post(Config.Create_User)
+                .post(Config.CREATE_USER)
                 .then().extract().response();
     }
 
