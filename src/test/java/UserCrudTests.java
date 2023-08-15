@@ -20,7 +20,10 @@ public class UserCrudTests {
         Response createUserResponse = new PetStoreUserEndPoint().createUser(newUser);
 
         // Then
-        User createdUser = createUserResponse.body().as(User.class);
+//        User createdUser = createUserResponse.body().as(User.class);
+        User createdUser = new PetStoreUserEndPoint()
+                .getUserByIdUsername(newUser.getUsername())
+                .as(User.class);
 
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(createdUser.getUsername()).isEqualTo(newUser.getUsername());

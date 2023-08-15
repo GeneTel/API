@@ -1,8 +1,14 @@
 package models;
 
-public class User {
-    public long id;
-    public String username;
+public class User_1 {
+    public static final String USER_FIRST_NAME = "first name";
+    public static final String USER_LAST_NAME = "last name";
+    public static final String USER_EMAIL = "email.com";
+    public static final String USER_PASSWORD = "password";
+    public static final String USER_PHONE = "123-123-123";
+    public static final int USER_STATUS = 0;
+    public int id;
+    private String username;
     public String firstName;
     public String lastName;
     public String email;
@@ -10,7 +16,7 @@ public class User {
     public String phone;
     public int userStatus;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -73,9 +79,18 @@ public class User {
     public void setUserStatus(int userStatus) {
         this.userStatus = userStatus;
     }
+    public static User_1 createUserAsClass(int id, String name) {
 
+        User_1 user = new User_1();
+        user.setUsername(name);
+        user.setId(id);
+        user.setFirstName(USER_FIRST_NAME);
+        user.setLastName(USER_LAST_NAME);
+        user.setEmail(USER_EMAIL);
+        user.setPassword(USER_PASSWORD);
+        user.setPhone(USER_PHONE);
+        user.setUserStatus(USER_STATUS);
+
+        return user;
     }
-
-
-
-
+}

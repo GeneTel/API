@@ -7,4 +7,6 @@ public class Config {
     public static final String Read_User_BY_Username = "/user/{username}";
     public static final String Delete_User_BY_Username = "/user/{username}";
 
+
+    public static final String USER_BY_NAME = "/user/{username}";
 }
